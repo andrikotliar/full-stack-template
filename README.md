@@ -46,4 +46,18 @@ chmod +x prepare-project.sh && ./prepare-project.sh
 pnpm install
 ```
 
+4. Start the database
+
+```bash
+docker compose up -d
+```
+
+5. Create a desired user, password and database in the postgres.
+
+6. Setup environment variables in the API folder:
+
+```bash
+cp apps/api/.env.sample apps/api/.env
+```
+
 To start both API and Web apps at the same tine, run `pnpm dev` at the root of the project.
