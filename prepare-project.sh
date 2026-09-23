@@ -6,9 +6,9 @@ set -e
 PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_NAME="$(basename "$PROJECT_ROOT")"
 
-# Project name must contain only letters and dashes
-if [[ ! "$PROJECT_NAME" =~ ^[a-zA-Z-]+$ ]]; then
-    echo "Error: project name '$PROJECT_NAME' can only contain letters and dashes."
+# Project name may contain letters, numbers, dashes, and underscores
+if [[ ! "$PROJECT_NAME" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+    echo "Error: project name '$PROJECT_NAME' can only contain letters, numbers, dashes, and underscores."
     exit 1
 fi
 

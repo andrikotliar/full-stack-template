@@ -29,21 +29,15 @@
 1. Copy the repository:
 
 ```bash
-export PROJECT_NAME=<YOUR_PROJECT_NAME>
-git clone git@github.com:andrikotliar/full-stack-template.git $PROJECT_NAME
+git clone git@github.com:andrikotliar/full-stack-template.git <YOUR_FOLDER_NAME>
 ```
 
-2. Run the set of commands to setup the repository:
+2. Run the command to setup the repository:
 
 ```bash
-# 1
-cd $PROJECT_NAME
+cd <YOUR_FOLDER_NAME>
+chmod +x prepare-project.sh && ./prepare-project.sh
 
-# 2 
-chmod +x prepare-project.sh
-
-# 3
-./prepare-project.sh
 ```
 
 3. Run in the root of the project to install all dependencies
