@@ -1,0 +1,29 @@
+{
+  "name": "@template/api",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/server",
+    "build": "tsc -p tsconfig.build.json",
+    "db:gen": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --quiet --ext .ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.1",
+    "@types/pg": "^8.23.1",
+    "dotenv": "^18.0.3",
+    "drizzle-orm": "^0.45.3",
+    "hono": "^4.13.8",
+    "pg": "^8.23.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@template/eslint-config": "workspace:^",
+    "@types/node": "^24.13.6",
+    "drizzle-kit": "^0.31.11",
+    "eslint": "^10.11.0",
+    "tsc-alias": "^1.9.5",
+    "tsx": "^4.23.15"
+  }
+}
