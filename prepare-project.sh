@@ -1,40 +1,48 @@
-```bash
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -e
 
-# Get the current project root directory name.
-PROJECT_ROOT="$(basename "$(pwd)")"
+# Directory containing this script = project root
+PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_NAME="$(basename "$PROJECT_ROOT")"
 
-# Only letters and dashes are allowed.
-if [[ ! "$PROJECT_ROOT" =~ ^[a-zA-Z-]+$ ]]; then
-  echo "Error: project root name '$PROJECT_ROOT' contains characters other than letters and dashes."
-  exit 1
+# Project name must contain only letters and dashes
+if [[ ! "$PROJECT_NAME" =~ ^[a-zA-Z-]+$ ]]; then
+    echo "Error: project name '$PROJECT_NAME' can only contain letters and dashes."
+    exit 1
 fi
 
+# Check jq
 if ! command -v jq >/dev/null 2>&1; then
-  echo "Error: jq is required but was not found."
-  exit 1
+    echo "Error: jq is required. Install it with: brew install jq"
+    exit 1
 fi
 
-echo "Using project name: @$PROJECT_ROOT"
+echo "Project root: $PROJECT_ROOT"
+echo "Project name: $PROJECT_NAME"
+echo
 
-find . -type f -name "package.json" -not -path "*/node_modules/*" -print0 |
+find "$PROJECT_ROOT" \
+    -type f \
+    -name "package.json" \
+    -not -path "*/node_modules/*" \
+    -print0 |
 while IFS= read -r -d '' file; do
-  echo "Updating: $file"
 
-  tmp="$(mktemp)"
+    echo "Updating: $file"
 
-  jq --arg namespace "@$PROJECT_ROOT" '
-    if (.name | type) == "string" and (.name | startswith("@template/")) then
-      .name = (.name | sub("^@template/"; "\($namespace)/"))
-    else
-      .
-    end
-  ' "$file" > "$tmp"
+    tmp="$(mktemp)"
 
-  mv "$tmp" "$file"
+    jq --arg namespace "@$PROJECT_NAME" '
+        if (.name | type) == "string" and (.name | startswith("@template/")) then
+            .name = (.name | sub("^@template/"; "\($namespace)/"))
+        else
+            .
+        end
+    ' "$file" > "$tmp"
+
+    mv "$tmp" "$file"
 done
 
+echo
 echo "Done."
-```

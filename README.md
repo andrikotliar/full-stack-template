@@ -33,11 +33,16 @@ export PROJECT_NAME=<YOUR_PROJECT_NAME>
 git clone git@github.com:andrikotliar/full-stack-template.git $PROJECT_NAME
 ```
 
-2. Run the command to setup the repository:
+2. Run the set of commands to setup the repository:
 
 ```bash
+# 1
 cd $PROJECT_NAME
+
+# 2 
 chmod +x prepare-project.sh
+
+# 3
 ./prepare-project.sh
 ```
 
