@@ -1,25 +1,26 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-# Directory containing this script = project root
+# The directory where this script lives is the project root.
 PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_NAME="$(basename "$PROJECT_ROOT")"
+NAMESPACE="@${PROJECT_NAME}"
 
-# Project name may contain letters, numbers, dashes, and underscores
+# Project name may contain letters, numbers, dashes, and underscores.
 if [[ ! "$PROJECT_NAME" =~ ^[a-zA-Z0-9_-]+$ ]]; then
-    echo "Error: project name '$PROJECT_NAME' can only contain letters, numbers, dashes, and underscores."
+    echo "Error: project name '$PROJECT_NAME' can only contain letters, numbers, dashes, and underscores." >&2
     exit 1
 fi
 
-# Check jq
+# jq is required.
 if ! command -v jq >/dev/null 2>&1; then
-    echo "Error: jq is required. Install it with: brew install jq"
+    echo "Error: jq is required. Install it with: brew install jq" >&2
     exit 1
 fi
 
 echo "Project root: $PROJECT_ROOT"
-echo "Project name: $PROJECT_NAME"
+echo "Namespace:    $NAMESPACE"
 echo
 
 find "$PROJECT_ROOT" \
@@ -29,13 +30,13 @@ find "$PROJECT_ROOT" \
     -print0 |
 while IFS= read -r -d '' file; do
 
-    echo "Updating: $file"
+    echo "Processing: $file"
 
     tmp="$(mktemp)"
 
-    jq --arg namespace "@$PROJECT_NAME" '
-        if (.name | type) == "string" and (.name | startswith("@template/")) then
-            .name = (.name | sub("^@template/"; "\($namespace)/"))
+    jq --arg namespace "$NAMESPACE" '
+        if (.name? | type) == "string" then
+            .name |= sub("^@[^/]+"; $namespace)
         else
             .
         end
