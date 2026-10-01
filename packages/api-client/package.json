@@ -1,0 +1,22 @@
+{
+  "name": "@template/api-client",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "hono": "^4.13.8"
+  },
+  "devDependencies": {
+    "@template/api": "workspace:^",
+    "@template/eslint-config": "workspace:^",
+    "@template/shared": "workspace:^",
+    "@types/node": "^26.6.2",
+    "eslint": "^10.11.0",
+    "typescript": "~6.0.3"
+  },
+  "packageManager": "pnpm@10.17.0"
+}
