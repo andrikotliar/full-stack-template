@@ -1,12 +1,21 @@
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 import { serve } from '@hono/node-server';
-import { env } from '@/configs/env.js';
+import { variables } from './configs/variables.js';
+import { initRootRouter } from './router.js';
 
 const app = new Hono({});
 
-app.get('/healthcheck', (c) => c.json({ ok: true }));
+app.use(
+  cors({
+    origin: variables.FRONTEND_ORIGIN,
+    credentials: true,
+  }),
+);
 
-serve({ fetch: app.fetch, port: env.PORT }, (info) => {
+initRootRouter(app);
+
+serve({ fetch: app.fetch, port: variables.PORT }, (info) => {
   // eslint-disable-next-line no-console
   console.log(`Server is listening on http://localhost:${info.port}`);
 });
